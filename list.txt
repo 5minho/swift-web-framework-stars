@@ -1,0 +1,6 @@
+https://github.com/vapor/vapor
+https://github.com/IBM-Swift/Kitura
+https://github.com/sauliusgrigaitis/Swifton
+https://github.com/elliottminns/blackfire
+https://github.com/skylab-inc/Lightning
+https://github.com/PerfectlySoft/Perfect
