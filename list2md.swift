@@ -181,7 +181,7 @@ let fullNames : [String] = {
     return "list.txt".contentString
         .split(separator: "\n")
         .filter {
-            $0.hasPrefix("https://github.com/")
+            String($0).hasPrefix("https://github.com/")
         }.map {
             let repo_url = String($0).trimmed
             let sIdx = repo_url.index(repo_url.startIndex, offsetBy: 19)
