@@ -144,7 +144,7 @@ enum RequestError : Error {
 
 struct Request {
     let api : API
-    func req(successHandler : @escaping (ResponseObj) -> (),
+    func get(successHandler : @escaping (ResponseObj) -> (),
              errorHandler : @escaping  (Error) -> ()) {
         guard let url = api.url else {
             errorHandler(RequestError.urlError)
@@ -211,7 +211,7 @@ func updateReadme(repos : [Repo], to url : URL) throws {
 func main() throws {
     var repos = [Repo]()
     for fullName in fullNames {
-        Request(api: .repo(fullName)).req(successHandler: { (repo) in
+        Request(api: .repo(fullName)).get(successHandler: { (repo) in
             guard let repo = repo as? Repo else {
                 return
             }
@@ -221,7 +221,7 @@ func main() throws {
         }
     }
     for i in 0..<repos.count {
-        Request(api: .commit(repos[i])).req(successHandler: { commitInfo in
+        Request(api: .commit(repos[i])).get(successHandler: { commitInfo in
             guard let commitInfo = commitInfo as? CommitInfo else {
                 return
             }
