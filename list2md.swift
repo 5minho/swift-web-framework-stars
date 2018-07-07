@@ -80,9 +80,6 @@ struct Repo : Codable, ResponseObj {
 
 }
 
-
-
-
 let access_token : String = {
     return "access_token.txt".contentString.trimmed
 }()
@@ -200,11 +197,11 @@ Please update **list.txt** (via Pull Request)
 """
 let tail = "\n*Last Automatic Update: "
 
-func update(repos : [Repo], to url : URL) throws {
+func updateReadme(repos : [Repo], to url : URL) throws {
     try head.appendLine(to: url)
     for repo in repos {
         guard let commit = repo.commit else {continue}
-        try "| [\(repo.name)](\(repo.htmlUrl) | \(repo.stargazersCount) | \(repo.forksCount) | \(repo.openIssuesCount) | \(repo.description) | \(commit.committer.date) |".appendLine(to: url)
+        try "| [\(repo.name)](\(repo.htmlUrl)) | \(repo.stargazersCount) | \(repo.forksCount) | \(repo.openIssuesCount) | \(repo.description) | \(commit.committer.date) |".appendLine(to: url)
     }
     let today = formatter.string(from: Date())
     try (tail + today + "*").appendLine(to: url)
@@ -234,15 +231,16 @@ func main() throws {
         }
     }
     repos.sort { $0.stargazersCount > $1.stargazersCount }
-    FileManager.default.createFile(atPath: "README.md", contents: nil)
-    if let url = URL(string : "README.md") {
-        do {
-            try update(repos: repos, to : url)
-        } catch {
-            print("Cound not update to file")
+
+    if FileManager.default.createFile(atPath: "README.md", contents: nil) {
+        if let url = URL(string : "README.md") {
+            do {
+                try updateReadme(repos: repos, to : url)
+            } catch {
+                print("Cound not update to file")
+            }
         }
     }
-
 }
 
 try? main()
