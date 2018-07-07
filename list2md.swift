@@ -114,7 +114,7 @@ enum API {
         }
     }
 
-    func map(data : Data) -> ResponseObj? {
+    func decode(data : Data) -> ResponseObj? {
         switch self {
         case .repo:
             return try? jsonDecoder.decode(Repo.self, from: data)
@@ -128,7 +128,7 @@ enum API {
 enum RequestError : Error {
     case urlError
     case serverError
-    case mappingError
+    case decodingError
 
     var localizedDescription: String {
         switch self {
@@ -136,8 +136,8 @@ enum RequestError : Error {
             return "urlError"
         case .serverError:
             return "serverError"
-        case .mappingError:
-            return "mappingError"
+        case .decodingError:
+            return "decodingError"
         }
     }
 }
@@ -164,8 +164,8 @@ struct Request {
                 errorHandler(RequestError.serverError)
                 return
             }
-            guard let responseObj = self.api.map(data: data) else {
-                errorHandler(RequestError.mappingError)
+            guard let responseObj = self.api.decode(data: data) else {
+                errorHandler(RequestError.decodingError)
                 return
             }
             successHandler(responseObj)
